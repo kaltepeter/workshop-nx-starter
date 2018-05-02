@@ -9,12 +9,11 @@ import {Observable} from "rxjs/Observable";
   styleUrls: ['./logs-list.component.scss']
 })
 export class LogsListComponent implements OnInit {
-  logs: Observable<EventLog[]>;
+  logs$: Observable<EventLog[]> = this.logService.logs();
 
   constructor(private logService: LogService) { }
 
   ngOnInit() {
-    this.logs = this.logService.logs();
   }
 
 }

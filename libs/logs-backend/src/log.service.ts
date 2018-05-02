@@ -1,8 +1,8 @@
 import {Injectable, Optional} from '@angular/core';
-import {ApiConfig} from "@tuskdesk-suite/backend/src/api-config";
 import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs/Observable";
 import {EventLog} from "@tuskdesk-suite/data-models";
+import {ApiConfig} from "@tuskdesk-suite/backend";
 
 @Injectable()
 export class LogService {
