@@ -53,7 +53,33 @@
       "testTsconfig": "../../../tsconfig.spec.json",
       "prefix": "app",
       "styles": [
-        "styles.css"
+        "styles.scss"
+      ],
+      "scripts": [],
+      "environmentSource": "environments/environment.ts",
+      "environments": {
+        "dev": "environments/environment.ts",
+        "prod": "environments/environment.prod.ts"
+      },
+      "tags": []
+    },
+    {
+      "name": "logs",
+      "root": "apps/logs/src",
+      "outDir": "dist/apps/logs",
+      "assets": [
+        "assets",
+        "favicon.ico"
+      ],
+      "index": "index.html",
+      "main": "main.ts",
+      "polyfills": "polyfills.ts",
+      "test": "../../../test.js",
+      "tsconfig": "tsconfig.app.json",
+      "testTsconfig": "../../../tsconfig.spec.json",
+      "prefix": "app",
+      "styles": [
+        "styles.scss"
       ],
       "scripts": [],
       "environmentSource": "environments/environment.ts",
@@ -149,6 +175,13 @@
       "tags": []
     },
     {
+      "name": "logs-backend",
+      "root": "libs/logs-backend/src",
+      "test": "../../../test.js",
+      "appRoot": "",
+      "tags": []
+    },
+    {
       "name": "reporting-dashboard-view",
       "root": "libs/reporting-dashboard-view/src",
       "test": "../../../test.js",
@@ -201,6 +234,14 @@
     },
     {
       "project": "apps/reporting/e2e/tsconfig.e2e.json",
+      "exclude": "**/node_modules/**"
+    },
+    {
+      "project": "apps/logs/src/tsconfig.app.json",
+      "exclude": "**/node_modules/**"
+    },
+    {
+      "project": "apps/logs/e2e/tsconfig.e2e.json",
       "exclude": "**/node_modules/**"
     },
     {
