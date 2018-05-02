@@ -3,7 +3,7 @@ import { FormControl } from '@angular/forms';
 import { Observable } from 'rxjs/Observable';
 import { TicketService, UserService } from '@tuskdesk-suite/backend';
 import { User } from '@tuskdesk-suite/data-models';
-import { distinctUntilChanged, debounceTime, filter, tap, map } from 'rxjs/operators';
+import { distinctUntilChanged, debounceTime, filter, tap, map, switchMap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-search-tickets',
@@ -14,40 +14,23 @@ export class SearchTicketsComponent implements OnInit, OnDestroy {
   searchTerm = new FormControl();
   assignedToUser = new FormControl();
   searchResults$: Observable<SearchResult[]>;
-  subscription;
-  users: String[];
+  users$: Observable<string>;
 
   constructor(private ticketService: TicketService, private userService: UserService) { }
 
   ngOnInit() {
-    this.subscription = this.assignedToUser.valueChanges
+    const toFullNames = (users) => users.map(it => it.fullName);
+    this.users$ = this.assignedToUser.valueChanges
       .pipe(
         debounceTime(500),
         distinctUntilChanged(),
-        tap(criteria => {
-          if (criteria.length < 1) {
-            this.users = null;
-          }
-        }),
-        filter(user => user.length > 0)        
-      )
-      .subscribe(searchValue => {
-        const toFullNames = (users) =>  users.map(it => it.fullName);
-        this.userService.users(searchValue)
-          .pipe(
-            map(toFullNames)
-          )
-          .subscribe(userFullNames => {
-            console.log('user: ', userFullNames);
-            this.users = userFullNames;
-          });
-      });
+        switchMap(searchValue => this.userService.users(searchValue)),
+        filter(user => user.length > 0),
+        map(toFullNames)
+      );
   }
 
   ngOnDestroy() {
-    if (this.subscription) {
-      this.subscription.unsubscribe();
-    }
   }
 
   setAssignedToUser(value) {
