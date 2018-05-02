@@ -1,7 +1,7 @@
-import {Injectable, Optional} from '@angular/core';
-import {HttpClient} from "@angular/common/http";
-import {Observable} from "rxjs/Observable";
-import {EventLog} from "@tuskdesk-suite/data-models";
+import { Injectable, Optional } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs/Observable';
+import { EventLog } from '@tuskdesk-suite/data-models';
 import { ApiConfig } from '@tuskdesk-suite/backend';
 
 @Injectable()
