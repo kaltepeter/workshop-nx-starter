@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import {LogService} from "@tuskdesk-suite/logs-backend";
+import {EventLog} from "@tuskdesk-suite/data-models";
+import {Observable} from "rxjs/Observable";
 
 @Component({
   selector: 'logs-list',
@@ -6,15 +9,12 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./logs-list.component.scss']
 })
 export class LogsListComponent implements OnInit {
-  logs = []
+  logs: Observable<EventLog[]>
 
-  constructor() { }
+  constructor(private logService: LogService) { }
 
   ngOnInit() {
-    this.logs = [
-      { message : "log one" },
-      { message : "log two" },
-    ];
+    this.logs = this.logService.logs();
   }
 
 }
