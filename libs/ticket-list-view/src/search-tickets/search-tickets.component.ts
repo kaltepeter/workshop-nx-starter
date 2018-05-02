@@ -3,6 +3,7 @@ import { FormControl } from '@angular/forms';
 import { Observable } from 'rxjs/Observable';
 import { TicketService, UserService } from '@tuskdesk-suite/backend';
 import { User } from '@tuskdesk-suite/data-models';
+import { distinctUntilChanged, debounceTime, filter, tap, map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-search-tickets',
@@ -14,17 +15,33 @@ export class SearchTicketsComponent implements OnInit, OnDestroy {
   assignedToUser = new FormControl();
   searchResults$: Observable<SearchResult[]>;
   subscription;
-  users: User[];
+  users: String[];
 
   constructor(private ticketService: TicketService, private userService: UserService) { }
 
   ngOnInit() {
-    this.subscription = this.assignedToUser.valueChanges.subscribe(searchValue => {
-      this.userService.users(searchValue).subscribe(users => {
-        console.log('user: ', users);
-        this.users = users;
+    this.subscription = this.assignedToUser.valueChanges
+      .pipe(
+        debounceTime(500),
+        distinctUntilChanged(),
+        tap(criteria => {
+          if (criteria.length < 1) {
+            this.users = null;
+          }
+        }),
+        filter(user => user.length > 0)        
+      )
+      .subscribe(searchValue => {
+        const toFullNames = (users) =>  users.map(it => it.fullName);
+        this.userService.users(searchValue)
+          .pipe(
+            map(toFullNames)
+          )
+          .subscribe(userFullNames => {
+            console.log('user: ', userFullNames);
+            this.users = userFullNames;
+          });
       });
-    });
   }
 
   ngOnDestroy() {
@@ -37,7 +54,7 @@ export class SearchTicketsComponent implements OnInit, OnDestroy {
     this.assignedToUser.patchValue(value, { emitEvent: false });
   }
 
-  submit() { 
+  submit() {
     this.searchResults$ = this.ticketService.searchTickets(this.searchTerm.value, this.assignedToUser.value);
   }
 }
