@@ -3,7 +3,7 @@
   "project": {
     "name": "tuskdesk-suite",
     "npmScope": "tuskdesk-suite",
-    "latestMigration": "20180405-add-workspace-schematic-command"
+    "latestMigration": "20180424-add-tsconfig-tools"
   },
   "apps": [
     {
@@ -177,6 +177,13 @@
     {
       "name": "logs-backend",
       "root": "libs/logs-backend/src",
+      "test": "../../../test.js",
+      "appRoot": "",
+      "tags": []
+    },
+    {
+      "name": "logs-state",
+      "root": "libs/logs-state/src",
       "test": "../../../test.js",
       "appRoot": "",
       "tags": []
