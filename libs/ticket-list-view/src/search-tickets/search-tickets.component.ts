@@ -24,8 +24,8 @@ export class SearchTicketsComponent implements OnInit, OnDestroy {
       .pipe(
         debounceTime(500),
         distinctUntilChanged(),
+        filter(user => user.length > 0),        
         switchMap(searchValue => this.userService.users(searchValue)),
-        filter(user => user.length > 0),
         map(toFullNames)
       );
   }
