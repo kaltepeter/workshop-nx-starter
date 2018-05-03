@@ -10,7 +10,7 @@ import { distinctUntilChanged, debounceTime, filter, tap, map, switchMap } from 
   templateUrl: './search-tickets.component.html',
   styleUrls: ['./search-tickets.component.scss']
 })
-export class SearchTicketsComponent implements OnInit, OnDestroy {
+export class SearchTicketsComponent implements OnInit {
   searchTerm = new FormControl();
   assignedToUser = new FormControl();
   searchResults$: Observable<SearchResult[]>;
@@ -28,9 +28,6 @@ export class SearchTicketsComponent implements OnInit, OnDestroy {
         switchMap(searchValue => this.userService.users(searchValue)),
         map(toFullNames)
       );
-  }
-
-  ngOnDestroy() {
   }
 
   setAssignedToUser(value) {
