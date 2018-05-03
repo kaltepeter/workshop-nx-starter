@@ -12,9 +12,7 @@
     <ng-template #editTicketMessage>
       <div class="ticket-message-form">
         <label>
-          <textarea name="ticketMessage" cols="30" rows="4"
-            [formControl]="ticketMessage"
-            [value]="ticket.message"></textarea>
+          <textarea name="ticketMessage" cols="30" rows="4" [formControl]="ticketMessage" [value]="ticket.message"></textarea>
         </label>
         <button (click)="cancelEdit()">Cancel</button>
         <button (click)="saveEdit()">Save</button>
@@ -42,7 +40,12 @@
   </div>
   <div class="ticket-timer">
     <div *ngIf="timer$ | async as time; else timerButton">
-      Time: <strong>{{time}}</strong>
+      Time:
+      <strong>{{time}}</strong>
+      TimerIds:
+      <div *ngFor="let timerId of (timeHistory$ | async)">
+        <strong>{{timerId}}</strong>
+      </div>
     </div>
     <ng-template #timerButton>
       <button (click)="startTimer()">Start a Timer</button>
