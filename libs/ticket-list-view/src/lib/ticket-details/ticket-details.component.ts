@@ -5,11 +5,10 @@ import { Observable } from 'rxjs/Observable';
 
 import { map } from 'rxjs/operators';
 import { untilViewDestroyed } from '@tuskdesk-suite/utils';
-import { select, Store } from '@ngrx/store';
 
-import { Ticket, TicketComment } from '@tuskdesk-suite/data-models';
-import { LoadTicket, PartialAppState, ticketsQuery } from '@tuskdesk-suite/tickets-state';
+import { TicketsFacade } from '@tuskdesk-suite/tickets-state';
 import { TicketTimerService } from '../ticket-timer.service';
+import { Ticket, TicketComment } from '@tuskdesk-suite/data-models';
 
 @Component({
   selector: 'app-ticket-details',
@@ -24,7 +23,7 @@ export class TicketDetailsComponent implements OnInit {
   markedToWork$: Observable<boolean>;
 
   constructor(
-    private store: Store<PartialAppState>,
+    private facade: TicketsFacade,
     private route: ActivatedRoute,
     private ticketTimerService: TicketTimerService,
     private elRef: ElementRef
@@ -33,14 +32,18 @@ export class TicketDetailsComponent implements OnInit {
   ngOnInit() {
     this.route.params.subscribe(params => {
       const id = +params['id'];
+      this.ticket$ = this.facade.entities$.pipe(
+        map(tickets => {
+          return tickets[id];
+        })
+      );
+
       this.markedToWork$ = this.ticketTimerService.ticketsToWork$.pipe(
         untilViewDestroyed(this.elRef),
         map(tickets => {
           return tickets.indexOf(id) !== -1;
         })
       );
-
-      this.ticket$ = this.store.pipe(select(ticketsQuery.getTicketAsEntities), map(tickets => tickets[id]));
     });
   }
 
